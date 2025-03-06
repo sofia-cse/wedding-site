@@ -21,6 +21,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "P&S Wedding",
   description: "Penelope and Sofia are tying the knot.",
+  openGraph: {
+    title: "P&S Wedding",
+    images: "https://www.penelopeandsofia.com/kiss.jpg",
+  },
 };
 
 export default function RootLayout({
