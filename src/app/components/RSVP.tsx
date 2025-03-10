@@ -1,12 +1,16 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import emailjs from "@emailjs/browser";
+import { CgSpinner } from "react-icons/cg";
 
 const RSVP = () => {
-  const form = useRef(null!);
+  const form = useRef<HTMLFormElement>(null!);
+  const [formState, setFormState] = useState("newSubmission");
+
   const sendEmail: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    setFormState("processing");
 
     emailjs
       .sendForm("service_3659z7o", "template_1h2plqr", form.current, {
@@ -15,9 +19,12 @@ const RSVP = () => {
       .then(
         () => {
           console.log("SUCCESS!");
+          form.current.reset();
+          setFormState("success");
         },
         (error) => {
           console.log("FAILED...", error.text);
+          setFormState("error");
         }
       );
   };
@@ -25,13 +32,13 @@ const RSVP = () => {
   return (
     <div className="w-full text-left">
       <div className="m-auto mb-4 w-full max-w-[1240px] px-2">
-        <div className="gap-8 md:grid lg:grid-cols-5">
+        <div className="gap-8 grid lg:grid-cols-5">
           {/* left */}
-          <div className="col-span-3 h-full w-full lg:col-span-2 lg:px-0">
+          <div className="col-span-3 order-last md:order-first h-full w-full lg:col-span-2 lg:px-0">
             <div className="h-full">
               <div className="text-center md:text-left">
                 <Image
-                  className="rounded-xl mx-auto mb-8 md:my-2"
+                  className="rounded-xl mx-auto md:mb-8 md:my-2"
                   src="/watercolor.jpg"
                   alt="Watercolor depiction of Penelope and Sofia SCUBA Diving in Hawaii"
                   width={375}
@@ -42,7 +49,7 @@ const RSVP = () => {
             </div>
           </div>
           {/* right */}
-          <div className="col-span-3 h-auto w-full">
+          <div className="col-span-3 order-first md:order-last h-auto w-full">
             <div className="">
               <form
                 ref={form}
@@ -62,7 +69,7 @@ const RSVP = () => {
                       id="name"
                       required
                       aria-required="true"
-                      autoComplete="Full name"
+                      autoComplete="name"
                     />
                   </div>
                   <div className="flex flex-col">
@@ -76,7 +83,7 @@ const RSVP = () => {
                       id="email"
                       required
                       aria-required="true"
-                      autoComplete="Email address"
+                      autoComplete="email"
                     />
                   </div>
                 </div>
@@ -96,7 +103,7 @@ const RSVP = () => {
                             value="yasssss"
                             defaultChecked
                           />
-                          <span className="p-4 flex justify-center peer-checked:bg-blue-600">
+                          <span className="p-4 flex justify-center peer-checked:bg-blue-600 peer-checked:text-white">
                             Yes
                           </span>
                         </label>
@@ -108,7 +115,7 @@ const RSVP = () => {
                             value="nooo :("
                             className="sr-only peer"
                           />
-                          <span className="p-4 flex justify-center peer-checked:bg-blue-600">
+                          <span className="p-4 flex justify-center peer-checked:bg-blue-600 peer-checked:text-white">
                             No
                           </span>
                         </label>
@@ -139,7 +146,7 @@ const RSVP = () => {
                     type="text"
                     className="rounded-md border border-gray-500 p-3 dark:bg-transparent"
                     name="dietary_restrictions"
-                    id="dierary_restrictions"
+                    id="dietary_restrictions"
                   />
                 </div>
                 <div className="flex flex-col">
@@ -155,11 +162,34 @@ const RSVP = () => {
                 </div>
                 <input type="hidden" name="_gotcha" className="hidden"></input>
                 <div className="flex flex-col">
-                  <input
-                    type="submit"
-                    value="Send"
-                    className="bg-blue-600 rounded-md mt-2 py-2 px-16 md:w-fit mx-auto cursor-pointer hover:shadow-sm hover:bg-blue-500 hover:scale-95"
-                  />
+                  {formState === "newSubmission" && (
+                    <input
+                      type="submit"
+                      value="Send"
+                      className="bg-blue-600 rounded-md mt-2 py-2 px-16 md:w-fit mx-auto cursor-pointer text-white hover:shadow-sm hover:bg-blue-500 hover:scale-95"
+                    />
+                  )}
+                  {formState === "processing" && (
+                    <button
+                      className="text-center mt-2 mx-auto py-2 px-16 bg-blue-600 text-white md:w-fit rounded-md"
+                      disabled
+                    >
+                      <CgSpinner className="inline mr-2 size-5 animate-spin" />
+                      Processing...
+                    </button>
+                  )}
+                  {formState === "success" && (
+                    <span className="text-center mx-auto mt-2 py-2">
+                      Thank you for your RSVP!
+                    </span>
+                  )}
+                  {formState === "error" && (
+                    <span className="text-center mt-2 py-2">
+                      We&apos;re sorry, there&apos;s been an error submitting
+                      your RSVP. Please check your internet connection and try
+                      again.
+                    </span>
+                  )}
                 </div>
               </form>
             </div>
