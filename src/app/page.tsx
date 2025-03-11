@@ -204,11 +204,9 @@ export default function Home() {
           <section className="container text-center mx-auto p-8">
             <h1>Registry</h1>
             <p className="max-w-3xl mx-auto">
-              We are fortunate to have built a home full of love and laughter
-              together. Your love is the greatest gift, and your presence at our
-              wedding is all we ask. If you&apos;d like to contribute in another
-              way, a gift to our future fund would be warmly received as we
-              start this new chapter.
+              As we embark on this new chapter, your presence is the greatest
+              gift of all, but if you&apos;d like to contribute to our future,
+              we&apos;d be grateful for a donation towards our honeymoon fund.
             </p>
           </section>
         </main>
